@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from collections import Counter
+from itertools import permutations
 
 def main():
     response = input("Enter a comma-separated set of skills:\n")
@@ -11,7 +12,8 @@ def main():
     print("Press ENTER to submit a boost node to your collection")
     print("Enter 'x' to exit")
     nodes = []
-    # Consider using a library like https://github.com/CITGuru/PyInquirer for a more intuitive UI
+    # TODO: consider using a library like https://github.com/CITGuru/PyInquirer for a more intuitive UI
+    # TODO: consider making nodes / skills / sets different classes
     while True:
         response = input()
         if response.lower() == 'x':
@@ -27,6 +29,7 @@ def main():
         if counter['o'] != 2:
             print("Error: node must include two other skills")
             continue
+        # TODO: check for any input besides p, o, n
         nodes.append(node)
 
     # Remove nodes that are just translations of secondary nodes
@@ -41,6 +44,27 @@ def main():
         3) To use the minimum number of boost nodes, a skill will apear on exactly 2 nodes
     '''
     # Determine whether or not the user has a suitable set of nodes
+    # Trivial brute force all permutations
+    # TODO: optimize this terrible algorithm
+    sets = []
+    for node_set in permutations(nodes):
+        # Check validity of set
+        invalid = False
+        for i, nodei in enumerate(node_set):
+            for s, skill in enumerate(nodei):
+                if skill == 'p':
+                    break
+            for nodeii in node_set(node_set[i+1:]):
+                if nodeii[s] == 'p':    # two nodes have the same primary skill
+                    invalid = True
+                    break
+            if invalid:
+                break
+
+        # Check optimality
+        # TODO: see above
+
+        sets.append(node_set)
 
 
 
@@ -48,4 +72,5 @@ def test():
     pass
 
 
+# test()
 main()
