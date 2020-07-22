@@ -29,9 +29,23 @@ def main():
             continue
         nodes.append(node)
 
+    # Remove nodes that are just translations of secondary nodes
+    nodes = ["".join(x) for x in nodes] # concatenate the chars in a node
+    nodes = list(set(nodes))    # remove duplicates; order is not preserved
+    nodes = [list(x) for x in nodes]    # break concatenated strings
+
+    '''
+    The set of nodes we are looking for is as follows:
+        1) The primary skills of all nodes in the set must be unique to be a valid set
+        2) To be maxed, a skill must appear on at least 2 boost nodes
+        3) To use the minimum number of boost nodes, a skill will apear on exactly 2 nodes
+    '''
     # Determine whether or not the user has a suitable set of nodes
 
 
+
+def test():
+    pass
 
 
 main()
